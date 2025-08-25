@@ -174,3 +174,69 @@ create policy if not exists cart_items_own on public.cart_items for all using (
   )
 );
 
+-- --------------------------------------------------------------------
+-- 🆕  Automated provisioning & wallet–credit utilities
+-- --------------------------------------------------------------------
+
+-- Auto-provision profile + wallet whenever a new auth.users row appears
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  -- create missing profile
+  insert into public.profiles (auth_user_id, email)
+  values (new.id, new.email)
+  on conflict (auth_user_id) do nothing;
+
+  -- create missing wallet for that profile
+  insert into public.wallets (user_id, balance_cents)
+  select p.id, 0 from public.profiles p where p.auth_user_id = new.id
+  on conflict (user_id) do nothing;
+
+  return new;
+end;
+$$;
+
+-- Ensure trigger exists on auth.users
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function public.handle_new_user();
+
+-- Idempotent wallet credit index
+create unique index if not exists wallet_tx_unique_reference
+  on public.wallet_transactions(user_id, reference_id)
+  where reference_id is not null;
+
+-- Atomic wallet credit helper
+create or replace function public.credit_wallet_by_profile(
+  p_profile_id uuid,
+  p_amount_cents integer,
+  p_reference text
+) returns void
+language plpgsql
+security definer
+as $$
+begin
+  -- ensure wallet row
+  insert into public.wallets(user_id, balance_cents)
+  values (p_profile_id, 0)
+  on conflict (user_id) do nothing;
+
+  -- attempt insert transaction (no-op if reference already exists)
+  insert into public.wallet_transactions(user_id, amount_cents, type, reference_id)
+  values (p_profile_id, p_amount_cents, 'topup', p_reference)
+  on conflict on constraint wallet_tx_unique_reference do nothing;
+
+  -- only adjust balance if new tx inserted
+  if found then
+    update public.wallets
+    set balance_cents = balance_cents + p_amount_cents,
+        updated_at   = now()
+    where user_id = p_profile_id;
+  end if;
+end;
+$$;
+
