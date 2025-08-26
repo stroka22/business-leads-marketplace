@@ -45,7 +45,6 @@ export default async function DashboardPage() {
       const admin = createAdminClient()
       const { data: newProf } = await admin
         .from('profiles')
-        // @ts-expect-error – Supabase generated types not yet available for 'profiles' insert
         .insert({ auth_user_id: user.id, email: user.email })
         .select('id')
         .single()
@@ -56,7 +55,6 @@ export default async function DashboardPage() {
       // Ensure wallet exists for that profileId
       await admin
         .from('wallets')
-        // @ts-expect-error – Supabase generated types not yet available for 'wallets' upsert
         .upsert(
           { user_id: profileId, balance_cents: 0 },
           { onConflict: 'user_id', ignoreDuplicates: true },

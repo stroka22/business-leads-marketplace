@@ -75,7 +75,6 @@ export async function POST(req: NextRequest) {
   // Create order
   const { data: order, error: orderError } = await adminClient
     .from('orders')
-    // @ts-expect-error – Supabase generated types not yet available for 'orders' insert
     .insert({
       user_id: profileId,
       status: 'pending',
@@ -105,7 +104,6 @@ export async function POST(req: NextRequest) {
 
   const { error: itemsError } = await adminClient
     .from('order_items')
-    // @ts-expect-error – Supabase generated types not yet available for 'order_items' insert
     .insert(orderItems)
 
   if (itemsError) {
@@ -146,7 +144,6 @@ export async function POST(req: NextRequest) {
   // Update order with provider reference
   await adminClient
     .from('orders')
-    // @ts-expect-error – Supabase generated types not yet available for 'orders' update
     .update({ provider_ref: session.id })
     .eq('id', orderId)
 

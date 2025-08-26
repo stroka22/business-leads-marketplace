@@ -63,7 +63,6 @@ export async function POST(req: NextRequest) {
     // 1) Mark order paid
     const { error: updErr } = await admin
       .from('orders')
-      // @ts-expect-error – Supabase generated types not yet available for 'orders' update
       .update({ status: 'paid' })
       .eq('id', orderId)
 
@@ -73,7 +72,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 2) Credit wallet via SQL helper (handles idempotency)
-    // @ts-expect-error – Supabase generated types not yet available for RPC call
+    // @ts-expect-error – RPC function types not generated
     const { error: creditErr } = await admin.rpc('credit_wallet_by_profile', {
       p_profile_id: profileId,
       p_amount_cents: ord.total_cents,
