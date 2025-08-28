@@ -23,12 +23,10 @@ export const createClient = () => {
     supabaseAnonKey,
     {
       cookies: {
-        get: async (name) => (await cookies()).get(name)?.value,
-        set: async (name, value, options) => {
-          (await cookies()).set({ name, value, ...options })
-        },
-        remove: async (name, options) => {
-          (await cookies()).set({ name, value: '', ...options })
+        // Only read cookies in server components – do not mutate
+        get: async (name) => {
+          const cookieStore = await cookies()
+          return cookieStore.get(name)?.value
         },
       },
     }
