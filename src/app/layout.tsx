@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Business Loan Lead Marketplace",
+  title: "Business Financing Lead Intelligence Engine",
   description:
-    "Browse, filter, and purchase qualified business-loan leads in real time.",
+    "AI-powered lead generation system for business financing opportunities.",
 };
 
 export default function RootLayout({
@@ -32,12 +32,17 @@ export default function RootLayout({
         <header className="border-b">
           <nav className="container mx-auto flex items-center justify-between px-4 py-3">
             <Link href="/" className="font-semibold text-lg">
-              LeadMarket
+              SBAC Funding
             </Link>
             <ul className="flex gap-4 text-sm">
               <li>
                 <Link href="/" className="hover:underline">
                   Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/financing" className="hover:underline font-medium text-blue-600">
+                  Lead Engine
                 </Link>
               </li>
               <li>
@@ -48,11 +53,6 @@ export default function RootLayout({
               <li>
                 <Link href="/pricing" className="hover:underline">
                   Pricing
-                </Link>
-              </li>
-              <li>
-                <Link href="/how-it-works" className="hover:underline">
-                  How It Works
                 </Link>
               </li>
               <li>

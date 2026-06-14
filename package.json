@@ -1,28 +1,36 @@
 {
-  "name": "loan-leads-marketplace",
+  "name": "business-financing-lead-engine",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "scrape": "npx tsx src/lib/scrapers/run.ts",
+    "scrape:ucc": "npx tsx src/lib/scrapers/run.ts ucc",
+    "scrape:hiring": "npx tsx src/lib/scrapers/run.ts hiring",
+    "scrape:contracts": "npx tsx src/lib/scrapers/run.ts contracts",
+    "report": "npx tsx src/lib/reports/daily.ts"
   },
   "dependencies": {
     "@stripe/stripe-js": "^7.8.0",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.56.0",
+    "cheerio": "^1.0.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "lucide-react": "^0.541.0",
     "next": "15.5.0",
+    "openai": "^4.77.0",
+    "p-queue": "^8.0.1",
     "papaparse": "^5.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
     "stripe": "^18.4.0",
-    "zod": "^4.1.1"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -31,9 +39,11 @@
     "@types/papaparse": "^5.3.16",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "15.5.0",
     "tailwindcss": "^4",
+    "tsx": "^4.22.4",
     "typescript": "^5"
   }
 }
