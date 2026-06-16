@@ -1,15 +1,33 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import PQueue from 'p-queue'
 import type { 
   SignalType, 
   Industry,
 } from '@/types/financing'
 
-// Create admin client for scrapers (bypasses RLS)
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+// Lazy-initialized admin client for scrapers (bypasses RLS)
+let _supabaseAdmin: SupabaseClient | null = null
 
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
+export function getSupabaseAdmin(): SupabaseClient {
+  if (!_supabaseAdmin) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY')
+    }
+    
+    _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
+  }
+  return _supabaseAdmin
+}
+
+// For backwards compatibility
+export const supabaseAdmin = new Proxy({} as SupabaseClient, {
+  get(_, prop) {
+    return (getSupabaseAdmin() as Record<string, unknown>)[prop as string]
+  }
+})
 
 // Rate limiting queue - max 2 concurrent requests, 500ms between
 export const fetchQueue = new PQueue({ concurrency: 2, interval: 500, intervalCap: 1 })

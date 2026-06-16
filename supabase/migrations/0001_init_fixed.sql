@@ -2,7 +2,7 @@
 create extension if not exists pgcrypto;
 create extension if not exists "uuid-ossp";
 
--- Users profile table (mirrors Supabase auth.users via trigger or manual upsert)
+-- Users profile table
 create table if not exists public.profiles (
   id uuid primary key default uuid_generate_v4(),
   auth_user_id uuid unique not null,
@@ -50,13 +50,13 @@ from public.leads l;
 create table if not exists public.orders (
   id uuid primary key default uuid_generate_v4(),
   user_id uuid not null references public.profiles(id) on delete cascade,
-  status text not null default 'pending', -- pending, paid, canceled
+  status text not null default 'pending',
   subtotal_cents integer not null default 0,
   discount_rate numeric not null default 0,
   discount_cents integer not null default 0,
   total_cents integer not null default 0,
-  provider text, -- stripe|paypal|wallet
-  provider_ref text, -- session id / payment id
+  provider text,
+  provider_ref text,
   created_at timestamptz not null default now()
 );
 
@@ -80,8 +80,8 @@ create table if not exists public.wallets (
 create table if not exists public.wallet_transactions (
   id uuid primary key default uuid_generate_v4(),
   user_id uuid not null references public.profiles(id) on delete cascade,
-  amount_cents integer not null, -- positive for top-up, negative for spend
-  type text not null, -- topup|purchase|refund|adjustment
+  amount_cents integer not null,
+  type text not null,
   reference_id text,
   created_at timestamptz not null default now()
 );
@@ -95,7 +95,7 @@ create table if not exists public.saved_filters (
   created_at timestamptz not null default now()
 );
 
--- Carts (optional server-side); clients may also cart locally
+-- Carts
 create table if not exists public.carts (
   id uuid primary key default uuid_generate_v4(),
   user_id uuid not null references public.profiles(id) on delete cascade,
@@ -110,13 +110,13 @@ create table if not exists public.cart_items (
   unique(cart_id, lead_id)
 );
 
--- Indexes for performance
+-- Indexes
 create index if not exists idx_leads_state on public.leads(state);
 create index if not exists idx_leads_industry on public.leads(industry);
 create index if not exists idx_leads_loan_purpose on public.leads(loan_purpose);
 create index if not exists idx_leads_date_acquired on public.leads(date_acquired);
 
--- RLS policies (enable RLS)
+-- Enable RLS
 alter table public.profiles enable row level security;
 alter table public.leads enable row level security;
 alter table public.orders enable row level security;
@@ -127,70 +127,64 @@ alter table public.saved_filters enable row level security;
 alter table public.carts enable row level security;
 alter table public.cart_items enable row level security;
 
--- Profiles: users can read/update own profile
-create policy if not exists profiles_select_self on public.profiles for select using (auth.uid() = auth_user_id);
-create policy if not exists profiles_update_self on public.profiles for update using (auth.uid() = auth_user_id);
+-- Policies (drop first to avoid errors if they exist)
+drop policy if exists profiles_select_self on public.profiles;
+drop policy if exists profiles_update_self on public.profiles;
+drop policy if exists leads_select_all on public.leads;
+drop policy if exists leads_admin_modify on public.leads;
+drop policy if exists orders_own on public.orders;
+drop policy if exists order_items_own on public.order_items;
+drop policy if exists wallets_own on public.wallets;
+drop policy if exists wallet_tx_own on public.wallet_transactions;
+drop policy if exists saved_filters_own on public.saved_filters;
+drop policy if exists carts_own on public.carts;
+drop policy if exists cart_items_own on public.cart_items;
 
--- Leads: anyone can select unsold leads (masked on app side); only admin can insert/update/delete
-create policy if not exists leads_select_all on public.leads for select using (true);
-create policy if not exists leads_admin_modify on public.leads for all using (
+create policy profiles_select_self on public.profiles for select using (auth.uid() = auth_user_id);
+create policy profiles_update_self on public.profiles for update using (auth.uid() = auth_user_id);
+create policy leads_select_all on public.leads for select using (true);
+create policy leads_admin_modify on public.leads for all using (
   exists(select 1 from public.profiles p where p.auth_user_id = auth.uid() and p.is_admin)
 );
-
--- Orders: users can see their own orders
-create policy if not exists orders_own on public.orders for select using (
+create policy orders_own on public.orders for select using (
   exists(select 1 from public.profiles p where p.id = user_id and p.auth_user_id = auth.uid())
 );
-
--- Order items: via order ownership
-create policy if not exists order_items_own on public.order_items for select using (
+create policy order_items_own on public.order_items for select using (
   exists(
     select 1 from public.orders o join public.profiles p on p.id = o.user_id
     where order_id = o.id and p.auth_user_id = auth.uid()
   )
 );
-
--- Wallets
-create policy if not exists wallets_own on public.wallets for select using (
+create policy wallets_own on public.wallets for select using (
   exists(select 1 from public.profiles p where p.id = user_id and p.auth_user_id = auth.uid())
 );
-create policy if not exists wallet_tx_own on public.wallet_transactions for select using (
+create policy wallet_tx_own on public.wallet_transactions for select using (
   exists(select 1 from public.profiles p where p.id = user_id and p.auth_user_id = auth.uid())
 );
-
--- Saved filters
-create policy if not exists saved_filters_own on public.saved_filters for all using (
+create policy saved_filters_own on public.saved_filters for all using (
   exists(select 1 from public.profiles p where p.id = user_id and p.auth_user_id = auth.uid())
 );
-
--- Carts
-create policy if not exists carts_own on public.carts for all using (
+create policy carts_own on public.carts for all using (
   exists(select 1 from public.profiles p where p.id = user_id and p.auth_user_id = auth.uid())
 );
-create policy if not exists cart_items_own on public.cart_items for all using (
+create policy cart_items_own on public.cart_items for all using (
   exists(
     select 1 from public.carts c join public.profiles p on p.id = c.user_id
     where c.id = cart_id and p.auth_user_id = auth.uid()
   )
 );
 
--- --------------------------------------------------------------------
--- 🆕  Automated provisioning & wallet–credit utilities
--- --------------------------------------------------------------------
-
--- Auto-provision profile + wallet whenever a new auth.users row appears
+-- Auto-provision profile + wallet
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer
 as $$
 begin
-  -- create missing profile
   insert into public.profiles (auth_user_id, email)
   values (new.id, new.email)
   on conflict (auth_user_id) do nothing;
 
-  -- create missing wallet for that profile
   insert into public.wallets (user_id, balance_cents)
   select p.id, 0 from public.profiles p where p.auth_user_id = new.id
   on conflict (user_id) do nothing;
@@ -199,18 +193,15 @@ begin
 end;
 $$;
 
--- Ensure trigger exists on auth.users
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
--- Idempotent wallet credit index
 create unique index if not exists wallet_tx_unique_reference
   on public.wallet_transactions(user_id, reference_id)
   where reference_id is not null;
 
--- Atomic wallet credit helper
 create or replace function public.credit_wallet_by_profile(
   p_profile_id uuid,
   p_amount_cents integer,
@@ -220,17 +211,14 @@ language plpgsql
 security definer
 as $$
 begin
-  -- ensure wallet row
   insert into public.wallets(user_id, balance_cents)
   values (p_profile_id, 0)
   on conflict (user_id) do nothing;
 
-  -- attempt insert transaction (no-op if reference already exists)
   insert into public.wallet_transactions(user_id, amount_cents, type, reference_id)
   values (p_profile_id, p_amount_cents, 'topup', p_reference)
   on conflict on constraint wallet_tx_unique_reference do nothing;
 
-  -- only adjust balance if new tx inserted
   if found then
     update public.wallets
     set balance_cents = balance_cents + p_amount_cents,
@@ -239,4 +227,3 @@ begin
   end if;
 end;
 $$;
-
