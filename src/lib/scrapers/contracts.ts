@@ -94,12 +94,24 @@ export class GovernmentContractScraper extends BaseScraper {
     // SAM.gov Opportunities API endpoint
     const baseUrl = 'https://api.sam.gov/opportunities/v2/search'
     
+    // SAM.gov requires MM/dd/yyyy format
+    const formatDate = (daysAgo: number): string => {
+      const date = new Date()
+      date.setDate(date.getDate() - daysAgo)
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      const year = date.getFullYear()
+      return `${month}/${day}/${year}`
+    }
+    
     const params = new URLSearchParams({
       api_key: apiKey,
-      naicsCode: naicsCode,
-      postedFrom: this.getDateDaysAgo(30), // Last 30 days
-      postedTo: this.getDateDaysAgo(0),
+      ptype: 'a', // Award Notices only
+      ncode: naicsCode, // NAICS code parameter
+      postedFrom: formatDate(365), // Last year (max allowed range)
+      postedTo: formatDate(0),
       limit: '100',
+      offset: '0',
       ...(state && { state: state }),
     })
 
@@ -117,25 +129,29 @@ export class GovernmentContractScraper extends BaseScraper {
       this.log(`Found ${opportunities.length} opportunities for NAICS ${naicsCode}`)
       
       for (const opp of opportunities) {
-        // Check if this is an award notice (not just a solicitation)
-        if (opp.type === 'Award Notice' || opp.type === 'Award') {
-          await this.processContractAward({
-            contract_number: opp.solicitationNumber || opp.noticeId,
-            award_date: opp.responseDate || opp.postedDate,
-            award_amount: opp.award?.amount,
-            contract_description: opp.title || opp.description,
-            awardee_name: opp.award?.awardee?.name || opp.pointOfContact?.[0]?.name || 'Unknown',
-            awardee_address: opp.award?.awardee?.location?.streetAddress,
-            awardee_city: opp.award?.awardee?.location?.city,
-            awardee_state: opp.award?.awardee?.location?.state || state,
-            awarding_agency: opp.department || opp.fullParentPathName,
-            agency_type: 'federal',
-            contract_type: this.classifyContractType(opp.title || opp.description || ''),
-            naics_code: naicsCode,
-            source_url: `https://sam.gov/opp/${opp.noticeId}`,
-            source_type: 'sam.gov',
-          })
-        }
+        // All results should be Award Notices since we filtered by ptype=a
+        const awardee = opp.award?.awardee
+        const awardeeName = awardee?.name || opp.pointOfContact?.[0]?.fullName || 'Unknown'
+        
+        // Skip if no valid awardee name
+        if (awardeeName === 'Unknown') continue
+        
+        await this.processContractAward({
+          contract_number: opp.award?.number || opp.solicitationNumber || opp.noticeId,
+          award_date: opp.award?.date || opp.postedDate,
+          award_amount: opp.award?.amount ? parseFloat(opp.award.amount) : undefined,
+          contract_description: opp.title,
+          awardee_name: awardeeName,
+          awardee_address: awardee?.location?.streetAddress,
+          awardee_city: awardee?.location?.city?.name,
+          awardee_state: awardee?.location?.state?.code || state,
+          awarding_agency: opp.fullParentPathName || opp.department,
+          agency_type: 'federal',
+          contract_type: this.classifyContractType(opp.title || ''),
+          naics_code: opp.naicsCode || naicsCode,
+          source_url: opp.uiLink || `https://sam.gov/opp/${opp.noticeId}/view`,
+          source_type: 'sam.gov',
+        })
       }
     } catch (error) {
       this.log(`Error fetching SAM.gov: ${error instanceof Error ? error.message : String(error)}`)
@@ -257,12 +273,6 @@ export class GovernmentContractScraper extends BaseScraper {
     }
     
     return naicsToIndustry[prefix]
-  }
-
-  private getDateDaysAgo(days: number): string {
-    const date = new Date()
-    date.setDate(date.getDate() - days)
-    return date.toISOString().split('T')[0]
   }
 }
 
