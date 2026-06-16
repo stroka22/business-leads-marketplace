@@ -17,7 +17,17 @@ export function getSupabaseAdmin(): SupabaseClient {
       throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY')
     }
     
-    _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
+    _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+      realtime: {
+        params: {
+          eventsPerSecond: 0, // Disable realtime for CLI usage
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    })
   }
   return _supabaseAdmin
 }
