@@ -11,6 +11,7 @@
     "scrape:ucc": "npx tsx src/lib/scrapers/run.ts ucc",
     "scrape:hiring": "npx tsx src/lib/scrapers/run.ts hiring",
     "scrape:contracts": "npx tsx src/lib/scrapers/run.ts contracts",
+    "import": "npx tsx src/lib/scrapers/import-csv.ts",
     "report": "npx tsx src/lib/reports/daily.ts"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "@supabase/supabase-js": "^2.56.0",
     "cheerio": "^1.0.0",
     "clsx": "^2.1.1",
+    "csv-parse": "^7.0.0",
     "dayjs": "^1.11.13",
     "lucide-react": "^0.541.0",
     "next": "15.5.0",
