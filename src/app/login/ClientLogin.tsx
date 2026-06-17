@@ -13,7 +13,12 @@ export default function ClientLogin() {
     setError(null)
     // Create Supabase client lazily to avoid accessing env vars during build
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithOtp({ email })
+    const { error } = await supabase.auth.signInWithOtp({ 
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      }
+    })
     if (error) setError(error.message)
     else setSent(true)
   }
