@@ -17,18 +17,18 @@ interface ContractAward {
   source_type?: string
 }
 
-// NAICS codes that often indicate equipment/financing needs
+// NAICS codes that often indicate equipment/financing needs (6-digit codes required by SAM.gov)
 const TARGET_NAICS_CODES = [
-  '236', // Construction of Buildings
-  '237', // Heavy and Civil Engineering Construction
-  '238', // Specialty Trade Contractors
-  '484', // Truck Transportation
-  '492', // Couriers and Messengers
-  '531', // Real Estate (construction-related)
-  '541', // Professional Services
-  '561', // Administrative Services
-  '562', // Waste Management
-  '811', // Repair and Maintenance
+  '236220', // Commercial and Institutional Building Construction
+  '237310', // Highway, Street, and Bridge Construction
+  '238210', // Electrical Contractors
+  '238220', // Plumbing, Heating, and AC Contractors
+  '238910', // Site Preparation Contractors
+  '484110', // General Freight Trucking, Local
+  '484121', // General Freight Trucking, Long-Distance
+  '562111', // Solid Waste Collection
+  '562119', // Other Waste Collection
+  '811111', // General Automotive Repair
 ]
 
 // Contract types that typically need capital
