@@ -100,7 +100,7 @@ export default function SharedLeadsView({ name, description, filters }: Props) {
             <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded">
               Shared View
             </span>
-            <span>SBAC Funding</span>
+            <span>BizOps</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
             {name}
@@ -190,7 +190,7 @@ export default function SharedLeadsView({ name, description, filters }: Props) {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500">
-          <p>Powered by SBAC Funding Lead Intelligence Engine</p>
+          <p>Powered by PipelineAI</p>
         </div>
       </div>
     </div>

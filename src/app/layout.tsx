@@ -32,7 +32,7 @@ export default function RootLayout({
         <header className="border-b">
           <nav className="container mx-auto flex items-center justify-between px-4 py-3">
             <Link href="/" className="font-semibold text-lg">
-              SBAC Funding
+              BizOps
             </Link>
             <ul className="flex gap-4 text-sm">
               <li>

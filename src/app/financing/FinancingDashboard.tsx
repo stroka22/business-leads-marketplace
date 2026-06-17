@@ -196,7 +196,7 @@ export default function FinancingDashboard() {
             Business Financing Lead Intelligence Engine
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
-            SBAC Funding Lead Generation System
+            BizOps Lead Generation System
           </p>
         </div>
 

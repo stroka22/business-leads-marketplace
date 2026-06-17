@@ -29,7 +29,7 @@ interface ClassificationInput {
   extra_context?: string
 }
 
-const SYSTEM_PROMPT = `You are a business financing analyst for SBAC Funding. Your job is to analyze business leads and determine their likely financing needs.
+const SYSTEM_PROMPT = `You are a business financing analyst for BizOps. Your job is to analyze business leads and determine their likely financing needs.
 
 Based on the signals provided, classify the lead into one of these financing categories:
 ${Object.entries(FINANCING_CATEGORY_LABELS).map(([k, v]) => `- ${k}: ${v}`).join('\n')}
