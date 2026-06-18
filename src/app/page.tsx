@@ -4,474 +4,352 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white py-20 px-4">
+      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-block px-4 py-1 bg-blue-700/50 rounded-full text-sm mb-6">
-                🚀 Fast Business Funding Solutions
+              <div className="inline-block px-4 py-1 bg-green-500/20 text-green-400 rounded-full text-sm mb-6 border border-green-500/30">
+                🎯 For Business Financing Professionals
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                Get the Capital Your Business Needs to Grow
+                Buy Pre-Qualified Business Financing Leads
               </h1>
-              <p className="mt-6 text-xl text-blue-100">
-                From $5,000 to $5 million. Equipment financing, working capital, SBA loans, and more. 
-                See what you qualify for in 2 minutes.
+              <p className="mt-6 text-xl text-slate-300">
+                Access real-time leads from businesses actively seeking equipment financing, working capital, 
+                SBA loans, and more. AI-scored and ready to close.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="/qualify"
+                  href="/financing"
                   className="px-8 py-4 bg-green-500 text-white font-semibold rounded-xl hover:bg-green-600 transition text-center text-lg"
                 >
-                  Check If I Qualify →
+                  View Lead Dashboard →
                 </Link>
                 <Link
-                  href="/calculator"
+                  href="/login"
                   className="px-8 py-4 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition text-center text-lg border border-white/30"
                 >
-                  Calculate Payments
+                  Login to Account
                 </Link>
               </div>
-              <div className="mt-8 flex items-center gap-6 text-sm text-blue-200">
-                <span className="flex items-center gap-2">✓ No obligation</span>
-                <span className="flex items-center gap-2">✓ No credit impact</span>
-                <span className="flex items-center gap-2">✓ 2-minute application</span>
+              <div className="mt-8 flex items-center gap-6 text-sm text-slate-400">
+                <span className="flex items-center gap-2">✓ Real-time leads</span>
+                <span className="flex items-center gap-2">✓ AI-scored quality</span>
+                <span className="flex items-center gap-2">✓ Exclusive territories</span>
               </div>
             </div>
             <div className="hidden md:block">
-              <div className="bg-white/10 backdrop-blur rounded-2xl p-8 border border-white/20">
-                <h3 className="text-xl font-semibold mb-6">Quick Funding Calculator</h3>
-                <QuickCalculator />
+              <div className="bg-white/5 backdrop-blur rounded-2xl p-6 border border-white/10">
+                <h3 className="text-lg font-semibold mb-4 text-slate-200">Today's Lead Stats</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white/5 rounded-xl p-4 text-center">
+                    <div className="text-3xl font-bold text-green-400">47</div>
+                    <div className="text-sm text-slate-400">New Leads Today</div>
+                  </div>
+                  <div className="bg-white/5 rounded-xl p-4 text-center">
+                    <div className="text-3xl font-bold text-blue-400">82</div>
+                    <div className="text-sm text-slate-400">Avg. Lead Score</div>
+                  </div>
+                  <div className="bg-white/5 rounded-xl p-4 text-center">
+                    <div className="text-3xl font-bold text-yellow-400">$2.4M</div>
+                    <div className="text-sm text-slate-400">Funding Requested</div>
+                  </div>
+                  <div className="bg-white/5 rounded-xl p-4 text-center">
+                    <div className="text-3xl font-bold text-purple-400">12</div>
+                    <div className="text-sm text-slate-400">Hot Leads (90+)</div>
+                  </div>
+                </div>
+                <Link
+                  href="/financing"
+                  className="block mt-4 text-center py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
+                >
+                  Access Leads →
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Trust Badges */}
-      <section className="py-8 bg-gray-50 border-b">
+      {/* Value Props */}
+      <section className="py-8 bg-slate-50 border-b">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 text-gray-400">
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-700">$50M+</div>
-              <div className="text-sm">Funded</div>
+              <div className="text-3xl font-bold text-slate-700">10+</div>
+              <div className="text-sm text-slate-500">Signal Types Tracked</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-700">10,000+</div>
-              <div className="text-sm">Businesses Helped</div>
+              <div className="text-3xl font-bold text-slate-700">SAM.gov</div>
+              <div className="text-sm text-slate-500">Contract Data</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-700">4.9/5</div>
-              <div className="text-sm">Customer Rating</div>
+              <div className="text-3xl font-bold text-slate-700">AI</div>
+              <div className="text-sm text-slate-500">Lead Scoring</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-700">24hrs</div>
-              <div className="text-sm">Avg. Funding Time</div>
+              <div className="text-3xl font-bold text-slate-700">Real-Time</div>
+              <div className="text-sm text-slate-500">Data Updates</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Financing Options */}
+      {/* Lead Sources */}
       <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Financing Solutions for Every Business Need
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
+              Multi-Signal Lead Intelligence
             </h2>
-            <p className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
-              Whether you need equipment, working capital, or growth funding, we have options that fit your business.
+            <p className="mt-4 text-xl text-slate-600 max-w-2xl mx-auto">
+              We aggregate data from multiple sources to identify businesses with high financing intent.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              {
-                icon: '🔧',
-                title: 'Equipment Financing',
-                desc: 'Purchase machinery, vehicles, and technology with the equipment as collateral.',
-                amount: 'Up to $2M',
-                speed: '3-5 days',
-              },
-              {
-                icon: '💰',
-                title: 'Working Capital',
-                desc: 'Cover payroll, inventory, and daily operations with flexible funding.',
-                amount: 'Up to $500K',
-                speed: '1-3 days',
-              },
               {
                 icon: '🏛️',
-                title: 'SBA Loans',
-                desc: 'Government-backed loans with the lowest rates and longest terms.',
-                amount: 'Up to $5M',
-                speed: '30-90 days',
+                title: 'Government Contracts',
+                desc: 'Businesses winning federal contracts often need working capital or equipment to fulfill them.',
+                source: 'SAM.gov',
+                status: 'Active',
               },
               {
-                icon: '💳',
-                title: 'Business Line of Credit',
-                desc: 'Draw funds when you need them. Only pay interest on what you use.',
-                amount: 'Up to $250K',
-                speed: '3-7 days',
+                icon: '📋',
+                title: 'UCC Filings',
+                desc: 'Equipment-secured loans indicate businesses that already use financing and may need more.',
+                source: 'State Records',
+                status: 'CSV Import',
               },
               {
-                icon: '🚛',
-                title: 'Commercial Vehicle',
-                desc: 'Finance trucks, trailers, and fleet vehicles for your business.',
-                amount: 'Up to $500K',
-                speed: '3-5 days',
+                icon: '👥',
+                title: 'Hiring Signals',
+                desc: 'Companies hiring equipment operators, drivers, and technicians are growing and need capital.',
+                source: 'Job Boards',
+                status: 'Coming Soon',
               },
               {
-                icon: '📄',
-                title: 'Invoice Factoring',
-                desc: 'Turn unpaid invoices into immediate cash without taking on debt.',
-                amount: 'Up to $5M',
-                speed: '24-48 hours',
+                icon: '🏗️',
+                title: 'Permit Activity',
+                desc: 'Building permits and expansion filings indicate growth that requires financing.',
+                source: 'Municipal Records',
+                status: 'Coming Soon',
               },
               {
-                icon: '🏢',
-                title: 'Commercial Real Estate',
-                desc: 'Purchase or refinance office, retail, warehouse, or multi-family property.',
-                amount: 'Up to $10M',
-                speed: '30-60 days',
+                icon: '🤝',
+                title: 'Dealer Referrals',
+                desc: 'Equipment dealers refer customers who need financing for purchases.',
+                source: 'Partner Network',
+                status: 'Active',
               },
               {
-                icon: '⚡',
-                title: 'Merchant Cash Advance',
-                desc: 'Fast funding based on future sales. No minimum credit score.',
-                amount: 'Up to $500K',
-                speed: '24-48 hours',
+                icon: '🌐',
+                title: 'Web Applications',
+                desc: 'Business owners who apply through our qualification tool are high-intent leads.',
+                source: 'BizOps.com',
+                status: 'Active',
               },
             ].map((item, i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-                <div className="text-3xl mb-3">{item.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
-                <p className="text-sm text-gray-600 mt-2">{item.desc}</p>
-                <div className="mt-4 pt-4 border-t flex justify-between text-sm">
-                  <span className="text-green-600 font-medium">{item.amount}</span>
-                  <span className="text-gray-500">{item.speed}</span>
+              <div key={i} className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-lg transition-shadow">
+                <div className="flex justify-between items-start mb-3">
+                  <span className="text-3xl">{item.icon}</span>
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${
+                    item.status === 'Active' ? 'bg-green-100 text-green-700' :
+                    item.status === 'CSV Import' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-slate-100 text-slate-600'
+                  }`}>
+                    {item.status}
+                  </span>
                 </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <Link
-              href="/qualify"
-              className="inline-block px-8 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition"
-            >
-              Find My Best Option →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-20 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              How It Works
-            </h2>
-            <p className="mt-4 text-xl text-gray-600">
-              Get funded in 3 simple steps
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                step: '1',
-                title: 'Tell Us About Your Business',
-                desc: 'Answer a few quick questions about your business needs. Takes just 2 minutes and won\'t affect your credit.',
-                icon: '📝',
-              },
-              {
-                step: '2',
-                title: 'Get Matched with Options',
-                desc: 'Our system instantly matches you with financing options you\'re likely to qualify for.',
-                icon: '🎯',
-              },
-              {
-                step: '3',
-                title: 'Get Funded Fast',
-                desc: 'Choose your best option, complete a simple application, and receive funding as fast as 24 hours.',
-                icon: '🚀',
-              },
-            ].map((item, i) => (
-              <div key={i} className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
-                  {item.icon}
+                <h3 className="text-lg font-semibold text-slate-900">{item.title}</h3>
+                <p className="text-sm text-slate-600 mt-2">{item.desc}</p>
+                <div className="mt-4 pt-4 border-t text-xs text-slate-500">
+                  Source: {item.source}
                 </div>
-                <div className="text-sm text-blue-600 font-semibold mb-2">STEP {item.step}</div>
-                <h3 className="text-xl font-semibold text-gray-900">{item.title}</h3>
-                <p className="text-gray-600 mt-2">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Qualification Criteria */}
-      <section className="py-20 px-4">
+      {/* Lead Scoring */}
+      <section className="py-20 px-4 bg-slate-50">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                Do I Qualify?
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
+                AI-Powered Lead Scoring
               </h2>
-              <p className="mt-4 text-xl text-gray-600">
-                Most businesses can qualify for at least one of our financing options. Here are the general requirements:
+              <p className="mt-4 text-xl text-slate-600">
+                Every lead is automatically scored 0-100 based on multiple signals. Focus your time on the highest-potential opportunities.
               </p>
               
               <div className="mt-8 space-y-4">
                 {[
-                  { label: 'Time in Business', value: '6+ months (some options available for startups)' },
-                  { label: 'Monthly Revenue', value: '$10,000+ (varies by product)' },
-                  { label: 'Credit Score', value: '500+ (some options have no minimum)' },
-                  { label: 'Industry', value: 'Most industries accepted' },
+                  { score: '90-100', label: 'Hot', desc: 'Multiple strong signals, high close probability', color: 'red' },
+                  { score: '70-89', label: 'Warm', desc: 'Good indicators, worth immediate outreach', color: 'orange' },
+                  { score: '50-69', label: 'Moderate', desc: 'Some signals, may need nurturing', color: 'yellow' },
+                  { score: '0-49', label: 'Cool', desc: 'Early stage, monitor for changes', color: 'blue' },
                 ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <span className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm flex-shrink-0">✓</span>
+                  <div key={i} className="flex items-center gap-4 bg-white p-4 rounded-xl border">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${
+                      item.color === 'red' ? 'bg-red-500' :
+                      item.color === 'orange' ? 'bg-orange-500' :
+                      item.color === 'yellow' ? 'bg-yellow-500' :
+                      'bg-blue-500'
+                    }`}>
+                      {item.score.split('-')[0]}
+                    </div>
                     <div>
-                      <span className="font-medium text-gray-900">{item.label}:</span>
-                      <span className="text-gray-600 ml-1">{item.value}</span>
+                      <div className="font-semibold text-slate-900">{item.label} ({item.score})</div>
+                      <div className="text-sm text-slate-600">{item.desc}</div>
                     </div>
                   </div>
                 ))}
               </div>
-
-              <Link
-                href="/qualify"
-                className="inline-block mt-8 px-8 py-4 bg-green-500 text-white font-semibold rounded-xl hover:bg-green-600 transition"
-              >
-                Check My Eligibility →
-              </Link>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl p-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-6">Industries We Serve</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  '🔧 Construction',
-                  '🚛 Trucking',
-                  '🏭 Manufacturing',
-                  '🏥 Healthcare',
-                  '🍽️ Restaurants',
-                  '🛒 Retail',
-                  '💼 Professional Services',
-                  '🌾 Agriculture',
-                  '🔌 HVAC/Electrical',
-                  '🏠 Real Estate',
-                  '🚗 Auto Services',
-                  '📦 Logistics',
-                ].map((industry, i) => (
-                  <div key={i} className="flex items-center gap-2 text-gray-700">
-                    {industry}
+            <div className="bg-white rounded-2xl p-6 border shadow-lg">
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">Sample Lead Card</h3>
+              <div className="border rounded-xl p-4">
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <div className="font-semibold text-lg">Precision Contractors LLC</div>
+                    <div className="text-sm text-slate-500">Construction • Houston, TX</div>
                   </div>
-                ))}
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-red-500">92</div>
+                    <div className="text-xs text-slate-500">Lead Score</div>
+                  </div>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 bg-green-100 text-green-600 rounded flex items-center justify-center text-xs">✓</span>
+                    <span>Won $890K federal contract (SAM.gov)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 bg-green-100 text-green-600 rounded flex items-center justify-center text-xs">✓</span>
+                    <span>UCC filing with CAT Financial</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 bg-green-100 text-green-600 rounded flex items-center justify-center text-xs">✓</span>
+                    <span>Hiring 3 equipment operators</span>
+                  </div>
+                </div>
+                <div className="mt-4 pt-4 border-t">
+                  <div className="text-xs text-slate-500 mb-2">AI Recommendation</div>
+                  <div className="text-sm text-slate-700">
+                    "Strong candidate for equipment financing ($150K-$300K range). Recent contract win indicates growth and ability to repay."
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20 px-4 bg-blue-900 text-white">
+      {/* Industries */}
+      <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold">
-              What Our Clients Say
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
+              Industries We Cover
             </h2>
+            <p className="mt-4 text-xl text-slate-600">
+              Leads across high-financing-need industries
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {[
-              {
-                quote: "Got $150K in equipment financing approved in 3 days. The process was incredibly smooth.",
-                name: "Mike R.",
-                title: "Construction Company Owner",
-                rating: 5,
-              },
-              {
-                quote: "After being turned down by my bank, BizOps found me a $75K line of credit. Lifesaver!",
-                name: "Sarah T.",
-                title: "Restaurant Owner",
-                rating: 5,
-              },
-              {
-                quote: "The qualification tool showed me exactly what I could get. No surprises, no hidden fees.",
-                name: "James L.",
-                title: "Trucking Fleet Manager",
-                rating: 5,
-              },
+              { icon: '🔧', name: 'Construction' },
+              { icon: '🚛', name: 'Trucking' },
+              { icon: '🏭', name: 'Manufacturing' },
+              { icon: '❄️', name: 'HVAC' },
+              { icon: '🔌', name: 'Electrical' },
+              { icon: '🚿', name: 'Plumbing' },
+              { icon: '🏠', name: 'Roofing' },
+              { icon: '🌳', name: 'Landscaping' },
+              { icon: '🚗', name: 'Auto Services' },
+              { icon: '🍽️', name: 'Restaurants' },
+              { icon: '🏥', name: 'Healthcare' },
+              { icon: '🚜', name: 'Agriculture' },
             ].map((item, i) => (
-              <div key={i} className="bg-white/10 backdrop-blur rounded-xl p-6">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(item.rating)].map((_, j) => (
-                    <span key={j} className="text-yellow-400">★</span>
-                  ))}
-                </div>
-                <p className="text-blue-100 italic">"{item.quote}"</p>
-                <div className="mt-4 pt-4 border-t border-white/20">
-                  <div className="font-semibold">{item.name}</div>
-                  <div className="text-sm text-blue-200">{item.title}</div>
-                </div>
+              <div key={i} className="bg-white rounded-xl border p-4 text-center hover:shadow-md transition-shadow">
+                <div className="text-2xl mb-2">{item.icon}</div>
+                <div className="text-sm font-medium text-slate-700">{item.name}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="py-20 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Frequently Asked Questions
-            </h2>
-          </div>
-
-          <div className="space-y-4">
-            {[
-              {
-                q: "Will checking if I qualify affect my credit score?",
-                a: "No! Our initial qualification check is a soft inquiry that doesn't impact your credit score. Only when you formally apply for a specific product will a hard inquiry occur.",
-              },
-              {
-                q: "How fast can I get funded?",
-                a: "Depending on the product, funding can happen in as little as 24 hours. SBA loans take longer (30-90 days), but most other options fund within 3-7 days.",
-              },
-              {
-                q: "What documents do I need to apply?",
-                a: "For most products, you'll need 3-6 months of bank statements, a government ID, and basic business information. Some products may require tax returns or financial statements.",
-              },
-              {
-                q: "Can I qualify with bad credit?",
-                a: "Yes! We have options for all credit profiles. Merchant cash advances and some working capital products have no minimum credit score requirement.",
-              },
-              {
-                q: "Are there any upfront fees?",
-                a: "We never charge upfront fees to check your options or apply. Any fees are clearly disclosed before you accept any offer.",
-              },
-            ].map((item, i) => (
-              <details key={i} className="bg-white border rounded-xl p-4 group">
-                <summary className="font-semibold text-gray-900 cursor-pointer list-none flex justify-between items-center">
-                  {item.q}
-                  <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
-                </summary>
-                <p className="mt-4 text-gray-600">{item.a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-20 px-4 bg-gradient-to-r from-green-500 to-green-600 text-white">
+      {/* Pricing Teaser */}
+      <section className="py-20 px-4 bg-gradient-to-br from-green-600 to-green-700 text-white">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold">
-            Ready to Grow Your Business?
+            Ready to Grow Your Pipeline?
           </h2>
           <p className="mt-4 text-xl text-green-100">
-            Join thousands of business owners who've found the right financing with BizOps.
+            Get access to pre-qualified business financing leads. Start closing more deals today.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/qualify"
-              className="px-8 py-4 bg-white text-green-600 font-semibold rounded-xl hover:bg-gray-100 transition text-lg"
+              href="/financing"
+              className="px-8 py-4 bg-white text-green-600 font-semibold rounded-xl hover:bg-slate-100 transition text-lg"
             >
-              Check If I Qualify →
+              View Lead Dashboard →
             </Link>
             <Link
-              href="/calculator"
-              className="px-8 py-4 bg-green-700 text-white font-semibold rounded-xl hover:bg-green-800 transition text-lg"
+              href="/login"
+              className="px-8 py-4 bg-green-800 text-white font-semibold rounded-xl hover:bg-green-900 transition text-lg border border-green-500"
             >
-              Calculate My Payments
+              Create Account
             </Link>
           </div>
-          <p className="mt-6 text-sm text-green-200">
-            No credit check to see your options • No obligation • 100% free
-          </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12 px-4">
+      <footer className="bg-slate-900 text-slate-400 py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="text-xl font-bold text-white mb-4">BizOps</div>
               <p className="text-sm">
-                Powered by PipelineAI. Helping businesses find the right financing since 2024.
+                Lead intelligence platform for business financing professionals. Powered by PipelineAI.
               </p>
             </div>
             <div>
-              <div className="font-semibold text-white mb-4">Products</div>
+              <div className="font-semibold text-white mb-4">Platform</div>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/calculator" className="hover:text-white">Loan Calculator</Link></li>
-                <li><Link href="/qualify" className="hover:text-white">Qualification Check</Link></li>
-                <li><Link href="/financing" className="hover:text-white">Lead Engine</Link></li>
+                <li><Link href="/financing" className="hover:text-white">Lead Dashboard</Link></li>
+                <li><Link href="/admin" className="hover:text-white">Admin Tools</Link></li>
+                <li><Link href="/login" className="hover:text-white">Login</Link></li>
               </ul>
             </div>
             <div>
-              <div className="font-semibold text-white mb-4">Company</div>
+              <div className="font-semibold text-white mb-4">For Business Owners</div>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/about" className="hover:text-white">About Us</Link></li>
-                <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
-                <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="hover:text-white">Terms of Service</Link></li>
+                <li><Link href="/apply" className="hover:text-white">Apply for Financing</Link></li>
+                <li><Link href="/apply/calculator" className="hover:text-white">Loan Calculator</Link></li>
+                <li><Link href="/apply/qualify" className="hover:text-white">Check Eligibility</Link></li>
               </ul>
             </div>
             <div>
               <div className="font-semibold text-white mb-4">Contact</div>
               <ul className="space-y-2 text-sm">
-                <li>1-800-XXX-XXXX</li>
-                <li>support@bizops.com</li>
+                <li>support@getpipelineai.com</li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
-            © {new Date().getFullYear()} BizOps. All rights reserved.
+          <div className="border-t border-slate-800 mt-8 pt-8 text-sm text-center">
+            © {new Date().getFullYear()} BizOps by PipelineAI. All rights reserved.
           </div>
         </div>
       </footer>
-    </div>
-  );
-}
-
-function QuickCalculator() {
-  return (
-    <div className="space-y-4 text-white">
-      <div>
-        <label className="block text-sm mb-2">Loan Amount</label>
-        <select className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white">
-          <option value="50000">$50,000</option>
-          <option value="100000" selected>$100,000</option>
-          <option value="250000">$250,000</option>
-          <option value="500000">$500,000</option>
-        </select>
-      </div>
-      <div>
-        <label className="block text-sm mb-2">Loan Type</label>
-        <select className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white">
-          <option>Equipment Financing</option>
-          <option>Working Capital</option>
-          <option>Business Term Loan</option>
-          <option>Line of Credit</option>
-        </select>
-      </div>
-      <div className="bg-white/10 rounded-lg p-4 text-center">
-        <div className="text-sm opacity-80">Estimated Monthly Payment</div>
-        <div className="text-3xl font-bold">$2,861</div>
-        <div className="text-xs opacity-70 mt-1">Based on 36 months at 12% APR</div>
-      </div>
-      <Link
-        href="/calculator"
-        className="block text-center py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
-      >
-        Get Exact Quote →
-      </Link>
     </div>
   )
 }

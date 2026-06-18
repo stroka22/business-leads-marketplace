@@ -467,7 +467,7 @@ export default function FinancingCalculator() {
                 Take our 2-minute qualification quiz to see which financing options you qualify for.
               </p>
               <a
-                href="/qualify"
+                href="/apply/qualify"
                 className="block text-center py-3 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition-colors"
               >
                 Check My Options →

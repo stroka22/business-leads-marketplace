@@ -36,25 +36,23 @@ export default function RootLayout({
             </Link>
             <ul className="hidden md:flex items-center gap-6 text-sm">
               <li>
-                <Link href="/qualify" className="text-gray-600 hover:text-blue-600 font-medium">
-                  Do I Qualify?
+                <Link href="/financing" className="text-gray-600 hover:text-blue-600 font-medium">
+                  Lead Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="/calculator" className="text-gray-600 hover:text-blue-600 font-medium">
-                  Calculator
+                <Link href="/admin" className="text-gray-600 hover:text-blue-600 font-medium">
+                  Admin
                 </Link>
               </li>
               <li className="relative group">
                 <span className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">
-                  Financing Options ▾
+                  For Business Owners ▾
                 </span>
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                  <Link href="/calculator?type=equipment_financing" className="block px-4 py-2 hover:bg-gray-50 text-sm">Equipment Financing</Link>
-                  <Link href="/calculator?type=working_capital" className="block px-4 py-2 hover:bg-gray-50 text-sm">Working Capital</Link>
-                  <Link href="/calculator?type=sba_loan" className="block px-4 py-2 hover:bg-gray-50 text-sm">SBA Loans</Link>
-                  <Link href="/calculator?type=business_loc" className="block px-4 py-2 hover:bg-gray-50 text-sm">Line of Credit</Link>
-                  <Link href="/calculator?type=invoice_factoring" className="block px-4 py-2 hover:bg-gray-50 text-sm">Invoice Factoring</Link>
+                  <Link href="/apply" className="block px-4 py-2 hover:bg-gray-50 text-sm">Apply for Financing</Link>
+                  <Link href="/apply/calculator" className="block px-4 py-2 hover:bg-gray-50 text-sm">Loan Calculator</Link>
+                  <Link href="/apply/qualify" className="block px-4 py-2 hover:bg-gray-50 text-sm">Check Eligibility</Link>
                 </div>
               </li>
               <li>
@@ -64,10 +62,10 @@ export default function RootLayout({
               </li>
               <li>
                 <Link 
-                  href="/qualify" 
+                  href="/financing" 
                   className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
                 >
-                  Get Funded →
+                  View Leads →
                 </Link>
               </li>
             </ul>
