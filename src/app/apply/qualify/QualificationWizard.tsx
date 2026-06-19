@@ -238,15 +238,18 @@ export default function QualificationWizard() {
   const progress = ((currentStepIndex) / (steps.length - 1)) * 100
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-3xl mx-auto px-4 py-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 text-center">
-            Business Financing Qualification
+      <div className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 py-12">
+        <div className="max-w-3xl mx-auto px-4">
+          <span className="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-400 rounded-full text-sm font-semibold mb-4 border border-emerald-500/30">
+            No Credit Impact
+          </span>
+          <h1 className="text-3xl md:text-4xl font-bold text-white text-center">
+            See What You Qualify For
           </h1>
-          <p className="text-gray-600 text-center mt-2">
-            Find out which financing options you qualify for in 2 minutes
+          <p className="text-slate-300 text-center mt-3 text-lg">
+            Answer a few questions to see your personalized financing options in 60 seconds
           </p>
         </div>
       </div>
@@ -654,7 +657,7 @@ export default function QualificationWizard() {
                 <div 
                   key={result.loanType}
                   className={`bg-white rounded-2xl shadow-lg p-6 border-l-4 ${
-                    i === 0 ? 'border-green-500' : 'border-blue-500'
+                    i === 0 ? 'border-green-500' : 'border-emerald-500'
                   }`}
                 >
                   <div className="flex justify-between items-start mb-4">
@@ -702,7 +705,7 @@ export default function QualificationWizard() {
                     </span>
                     <a 
                       href={`/calculator?type=${result.loanType}&amount=${answers.amount}`}
-                      className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                      className="text-emerald-600 hover:text-emerald-700 font-medium text-sm"
                     >
                       Calculate Payments →
                     </a>
@@ -712,19 +715,19 @@ export default function QualificationWizard() {
             </div>
 
             {/* Next Steps */}
-            <div className="bg-blue-50 rounded-2xl p-6">
+            <div className="bg-emerald-50 rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-4">📞 What Happens Next?</h3>
               <ol className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <span className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">1</span>
+                  <span className="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">1</span>
                   <span>A financing specialist will call you within 24 hours</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">2</span>
+                  <span className="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">2</span>
                   <span>We'll review your options and answer any questions</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">3</span>
+                  <span className="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">3</span>
                   <span>Submit your application in minutes - most approvals same day</span>
                 </li>
               </ol>
@@ -733,7 +736,7 @@ export default function QualificationWizard() {
             {/* CTA */}
             <div className="text-center">
               <p className="text-gray-600 mb-4">Questions? Call us directly:</p>
-              <a href="tel:1-800-XXX-XXXX" className="text-2xl font-bold text-blue-600 hover:text-blue-700">
+              <a href="tel:1-800-XXX-XXXX" className="text-2xl font-bold text-emerald-600 hover:text-emerald-700">
                 1-800-XXX-XXXX
               </a>
             </div>

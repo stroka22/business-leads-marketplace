@@ -195,22 +195,27 @@ export default function FinancingCalculator() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Hero */}
-      <section className="py-12 px-4 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Business Financing Calculator
-        </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Calculate your monthly payments, compare loan types, and see what you qualify for—all in one place.
-        </p>
+      <section className="py-16 px-4 text-center bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900">
+        <div className="max-w-3xl mx-auto">
+          <span className="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-400 rounded-full text-sm font-semibold mb-4 border border-emerald-500/30">
+            Free Calculator
+          </span>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Business Financing Calculator
+          </h1>
+          <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+            Calculate your monthly payments, compare loan types, and see what you qualify for—all in one place.
+          </p>
+        </div>
       </section>
 
       <div className="max-w-6xl mx-auto px-4 pb-16">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Calculator Panel */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+            <div className="bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-8">
               {/* Loan Type Selection */}
               <div className="mb-8">
                 <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -227,10 +232,10 @@ export default function FinancingCalculator() {
                         setRate((LOAN_TYPES[type].minRate + LOAN_TYPES[type].maxRate) / 2)
                         setShowResults(false)
                       }}
-                      className={`p-3 text-xs md:text-sm rounded-lg border-2 transition-all ${
+                      className={`p-3 text-xs md:text-sm rounded-xl border-2 transition-all ${
                         loanType === type
-                          ? 'border-blue-600 bg-blue-50 text-blue-700 font-semibold'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-emerald-500 bg-emerald-50 text-emerald-700 font-semibold'
+                          : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
                       {LOAN_TYPES[type].name}
@@ -240,9 +245,9 @@ export default function FinancingCalculator() {
               </div>
 
               {/* Loan Info */}
-              <div className="bg-blue-50 rounded-xl p-4 mb-8">
-                <h3 className="font-semibold text-blue-900">{loanInfo.name}</h3>
-                <p className="text-sm text-blue-700 mt-1">{loanInfo.description}</p>
+              <div className="bg-gradient-to-r from-emerald-50 to-cyan-50 rounded-2xl p-4 mb-8 border border-emerald-100">
+                <h3 className="font-semibold text-slate-900">{loanInfo.name}</h3>
+                <p className="text-sm text-slate-600 mt-1">{loanInfo.description}</p>
               </div>
 
               {/* Sliders */}
@@ -253,7 +258,7 @@ export default function FinancingCalculator() {
                     <label className="text-sm font-semibold text-gray-700">
                       {loanType === 'invoice_factoring' ? 'Invoice Amount' : 'Loan Amount'}
                     </label>
-                    <span className="text-lg font-bold text-blue-600">
+                    <span className="text-lg font-bold text-emerald-600">
                       ${amount.toLocaleString()}
                     </span>
                   </div>
@@ -264,7 +269,7 @@ export default function FinancingCalculator() {
                     step={loanInfo.minAmount < 10000 ? 1000 : 5000}
                     value={amount}
                     onChange={(e) => setAmount(Number(e.target.value))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                   />
                   <div className="flex justify-between text-xs text-gray-500 mt-1">
                     <span>${loanInfo.minAmount.toLocaleString()}</span>
@@ -278,7 +283,7 @@ export default function FinancingCalculator() {
                     <label className="text-sm font-semibold text-gray-700">
                       {loanType === 'invoice_factoring' ? 'Collection Period' : 'Loan Term'}
                     </label>
-                    <span className="text-lg font-bold text-blue-600">
+                    <span className="text-lg font-bold text-emerald-600">
                       {term} {loanType === 'invoice_factoring' ? 'weeks' : 'months'}
                     </span>
                   </div>
@@ -289,7 +294,7 @@ export default function FinancingCalculator() {
                     step={loanInfo.maxTerm > 60 ? 12 : 1}
                     value={term}
                     onChange={(e) => setTerm(Number(e.target.value))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                   />
                   <div className="flex justify-between text-xs text-gray-500 mt-1">
                     <span>{loanInfo.minTerm} {loanType === 'invoice_factoring' ? 'weeks' : 'months'}</span>
@@ -304,7 +309,7 @@ export default function FinancingCalculator() {
                       {loanType === 'invoice_factoring' ? 'Factoring Fee' : 
                        loanType === 'merchant_cash' ? 'Factor Rate' : 'Interest Rate (APR)'}
                     </label>
-                    <span className="text-lg font-bold text-blue-600">
+                    <span className="text-lg font-bold text-emerald-600">
                       {rate.toFixed(1)}%
                     </span>
                   </div>
@@ -315,7 +320,7 @@ export default function FinancingCalculator() {
                     step={0.5}
                     value={rate}
                     onChange={(e) => setRate(Number(e.target.value))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                   />
                   <div className="flex justify-between text-xs text-gray-500 mt-1">
                     <span>{loanInfo.minRate}%</span>
@@ -327,7 +332,7 @@ export default function FinancingCalculator() {
               {/* Calculate Button */}
               <button
                 onClick={handleCalculate}
-                className="w-full mt-8 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors text-lg"
+                className="w-full mt-8 py-4 bg-emerald-500 text-white font-semibold rounded-xl hover:bg-emerald-600 transition-colors text-lg"
               >
                 Calculate My Payment
               </button>
@@ -345,7 +350,7 @@ export default function FinancingCalculator() {
                       </div>
                       <div className="bg-white p-4 rounded-lg text-center">
                         <div className="text-sm text-gray-500">Factoring Fee</div>
-                        <div className="text-2xl font-bold text-blue-600">${factoringFee.toLocaleString()}</div>
+                        <div className="text-2xl font-bold text-emerald-600">${factoringFee.toLocaleString()}</div>
                       </div>
                       <div className="bg-white p-4 rounded-lg text-center">
                         <div className="text-sm text-gray-500">You Receive</div>
@@ -360,7 +365,7 @@ export default function FinancingCalculator() {
                       </div>
                       <div className="bg-white p-4 rounded-lg text-center">
                         <div className="text-sm text-gray-500">Factor Rate</div>
-                        <div className="text-2xl font-bold text-blue-600">{mcaFactorRate.toFixed(2)}x</div>
+                        <div className="text-2xl font-bold text-emerald-600">{mcaFactorRate.toFixed(2)}x</div>
                       </div>
                       <div className="bg-white p-4 rounded-lg text-center">
                         <div className="text-sm text-gray-500">Total Payback</div>
@@ -375,7 +380,7 @@ export default function FinancingCalculator() {
                       </div>
                       <div className="bg-white p-4 rounded-lg text-center">
                         <div className="text-sm text-gray-500">Total Interest</div>
-                        <div className="text-2xl font-bold text-blue-600">${totalInterest.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+                        <div className="text-2xl font-bold text-emerald-600">${totalInterest.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
                       </div>
                       <div className="bg-white p-4 rounded-lg text-center">
                         <div className="text-sm text-gray-500">Total Repayment</div>
@@ -620,7 +625,7 @@ export default function FinancingCalculator() {
                 setShowLeadForm(false)
                 setLeadSubmitted(false)
               }}
-              className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700"
+              className="px-6 py-3 bg-emerald-500 text-white font-semibold rounded-lg hover:bg-emerald-600"
             >
               Done
             </button>
