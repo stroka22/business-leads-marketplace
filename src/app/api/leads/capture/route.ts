@@ -1,7 +1,36 @@
 import { createFinancingServerClient } from '@/lib/supabase/financing-server'
 import { NextResponse } from 'next/server'
 
+const ALLOWED_ORIGINS = [
+  'https://getmybizloan.com',
+  'https://www.getmybizloan.com',
+  'http://localhost:3000',
+  'http://localhost:3001',
+]
+
+function getCorsHeaders(origin: string | null) {
+  const headers: Record<string, string> = {
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  }
+  
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    headers['Access-Control-Allow-Origin'] = origin
+  }
+  
+  return headers
+}
+
+export async function OPTIONS(request: Request) {
+  const origin = request.headers.get('origin')
+  return new NextResponse(null, {
+    status: 204,
+    headers: getCorsHeaders(origin),
+  })
+}
+
 export async function POST(request: Request) {
+  const origin = request.headers.get('origin')
   try {
     const data = await request.json()
     const supabase = await createFinancingServerClient()
@@ -29,7 +58,10 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error('Lead capture error:', error)
-      return NextResponse.json({ error: 'Failed to capture lead' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Failed to capture lead' },
+        { status: 500, headers: getCorsHeaders(origin) }
+      )
     }
 
     // Add a signal for web capture
@@ -42,10 +74,16 @@ export async function POST(request: Request) {
       raw_data: data,
     })
 
-    return NextResponse.json({ success: true, lead_id: newLead.id })
+    return NextResponse.json(
+      { success: true, lead_id: newLead.id },
+      { headers: getCorsHeaders(origin) }
+    )
   } catch (error) {
     console.error('Lead capture error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500, headers: getCorsHeaders(origin) }
+    )
   }
 }
 
