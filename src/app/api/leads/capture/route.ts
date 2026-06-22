@@ -57,6 +57,17 @@ export async function POST(request: Request) {
       source_type: data.source || 'web_capture',
       lead_score: calculateInitialScore(data),
       contact_status: 'new',
+      // New structured fields
+      loan_amount_requested: data.loan_amount ? parseFloat(data.loan_amount.replace(/[^0-9.]/g, '')) : null,
+      loan_purpose: data.loan_purpose || data.purpose,
+      time_in_business: data.time_in_business,
+      monthly_revenue: data.monthly_revenue,
+      credit_score_range: data.credit_score,
+      urgency: data.urgency,
+      has_collateral: data.has_collateral === 'yes' || data.has_collateral === true,
+      lead_source: data.source,
+      calculator_type: data.calculator_data?.type || data.calculatorType,
+      qualified_products: data.qualified_products,
       notes: buildNotes(data),
     }
 
