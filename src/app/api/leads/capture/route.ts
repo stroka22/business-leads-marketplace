@@ -1,5 +1,15 @@
-import { createFinancingServerClient } from '@/lib/supabase/financing-server'
+import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+
+// Use service role key for API endpoints (bypasses RLS)
+function getSupabaseAdmin() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !serviceKey) {
+    throw new Error('Missing Supabase credentials')
+  }
+  return createClient(url, serviceKey, { auth: { persistSession: false } })
+}
 
 const ALLOWED_ORIGINS = [
   'https://getmybizloan.com',
@@ -33,7 +43,7 @@ export async function POST(request: Request) {
   const origin = request.headers.get('origin')
   try {
     const data = await request.json()
-    const supabase = await createFinancingServerClient()
+    const supabase = getSupabaseAdmin()
 
     // Map common fields to actual table columns
     const lead = {
