@@ -378,6 +378,11 @@ function LeadsTab() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState({ status: '', industry: '', minScore: 0 })
   const [expandedLead, setExpandedLead] = useState<string | null>(null)
+  const [selectedLeads, setSelectedLeads] = useState<Set<string>>(new Set())
+  const [showEmailModal, setShowEmailModal] = useState(false)
+  const [showWebhookModal, setShowWebhookModal] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
+  const [shareUrl, setShareUrl] = useState('')
   const supabase = createFinancingClient()
 
   useEffect(() => {
@@ -413,8 +418,177 @@ function LeadsTab() {
     }
   }
 
+  const toggleSelectLead = (id: string) => {
+    const newSelected = new Set(selectedLeads)
+    if (newSelected.has(id)) {
+      newSelected.delete(id)
+    } else {
+      newSelected.add(id)
+    }
+    setSelectedLeads(newSelected)
+  }
+
+  const selectAllLeads = () => {
+    if (selectedLeads.size === leads.length) {
+      setSelectedLeads(new Set())
+    } else {
+      setSelectedLeads(new Set(leads.map(l => l.id)))
+    }
+  }
+
+  const getSelectedLeads = () => leads.filter(l => selectedLeads.has(l.id))
+
+  const exportToCSV = () => {
+    const leadsToExport = selectedLeads.size > 0 ? getSelectedLeads() : leads
+    const headers = [
+      'Company Name', 'Contact Name', 'Email', 'Phone', 'State', 'City',
+      'Industry', 'Lead Score', 'Status', 'Loan Amount', 'Loan Purpose',
+      'Time in Business', 'Monthly Revenue', 'Credit Score', 'Urgency',
+      'Has Collateral', 'Lead Source', 'Calculator Type', 'Qualified Products',
+      'Notes', 'Created At'
+    ]
+    const rows = leadsToExport.map(lead => [
+      lead.company_name || '',
+      lead.owner_name || '',
+      lead.email || '',
+      lead.phone || '',
+      lead.state || '',
+      lead.city || '',
+      lead.industry || '',
+      lead.lead_score || '',
+      lead.contact_status || '',
+      lead.loan_amount_requested || '',
+      lead.loan_purpose || '',
+      lead.time_in_business || '',
+      lead.monthly_revenue || '',
+      lead.credit_score_range || '',
+      lead.urgency || '',
+      lead.has_collateral ? 'Yes' : 'No',
+      lead.lead_source || '',
+      lead.calculator_type || '',
+      Array.isArray(lead.qualified_products) ? lead.qualified_products.join('; ') : '',
+      (lead.notes || '').replace(/\n/g, ' | '),
+      lead.created_at || ''
+    ])
+    
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n')
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `leads-export-${new Date().toISOString().split('T')[0]}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const sendToEmail = async (email: string) => {
+    const leadsToSend = selectedLeads.size > 0 ? getSelectedLeads() : leads
+    try {
+      const response = await fetch('/api/admin/leads/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leads: leadsToSend, recipientEmail: email }),
+      })
+      if (response.ok) {
+        alert('Leads sent successfully!')
+        setShowEmailModal(false)
+      } else {
+        alert('Failed to send leads')
+      }
+    } catch (error) {
+      alert('Error sending leads')
+    }
+  }
+
+  const sendToWebhook = async (webhookUrl: string) => {
+    const leadsToSend = selectedLeads.size > 0 ? getSelectedLeads() : leads
+    try {
+      const response = await fetch('/api/admin/leads/webhook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leads: leadsToSend, webhookUrl }),
+      })
+      if (response.ok) {
+        alert('Leads sent to webhook successfully!')
+        setShowWebhookModal(false)
+      } else {
+        alert('Failed to send to webhook')
+      }
+    } catch (error) {
+      alert('Error sending to webhook')
+    }
+  }
+
+  const generateShareLink = async () => {
+    const leadsToShare = selectedLeads.size > 0 ? getSelectedLeads() : leads
+    const leadIds = leadsToShare.map(l => l.id)
+    try {
+      const response = await fetch('/api/admin/leads/share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leadIds }),
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setShareUrl(`${window.location.origin}/leads/shared/${data.token}`)
+        setShowShareModal(true)
+      } else {
+        alert('Failed to generate share link')
+      }
+    } catch (error) {
+      alert('Error generating share link')
+    }
+  }
+
   return (
     <div className="space-y-4">
+      {/* Action Bar */}
+      <div className="bg-white rounded-lg border p-4 flex gap-3 flex-wrap items-center">
+        <span className="text-sm text-gray-600">
+          {selectedLeads.size > 0 ? `${selectedLeads.size} selected` : `${leads.length} leads`}
+        </span>
+        <div className="h-6 w-px bg-gray-200" />
+        <button
+          onClick={exportToCSV}
+          className="px-3 py-1.5 bg-green-600 text-white rounded text-sm hover:bg-green-700 flex items-center gap-1"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          Export CSV
+        </button>
+        <button
+          onClick={() => setShowEmailModal(true)}
+          className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 flex items-center gap-1"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          Email to Buyer
+        </button>
+        <button
+          onClick={() => setShowWebhookModal(true)}
+          className="px-3 py-1.5 bg-purple-600 text-white rounded text-sm hover:bg-purple-700 flex items-center gap-1"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+          Send to Webhook
+        </button>
+        <button
+          onClick={generateShareLink}
+          className="px-3 py-1.5 bg-orange-600 text-white rounded text-sm hover:bg-orange-700 flex items-center gap-1"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+          </svg>
+          Share Link
+        </button>
+      </div>
+
       {/* Filters */}
       <div className="bg-white rounded-lg border p-4 flex gap-4 flex-wrap">
         <select
@@ -472,6 +646,14 @@ function LeadsTab() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
               <tr className="text-left text-gray-600">
+                <th className="px-4 py-3 w-10">
+                  <input
+                    type="checkbox"
+                    checked={selectedLeads.size === leads.length && leads.length > 0}
+                    onChange={selectAllLeads}
+                    className="rounded border-gray-300"
+                  />
+                </th>
                 <th className="px-4 py-3">Company</th>
                 <th className="px-4 py-3">Location</th>
                 <th className="px-4 py-3">Industry</th>
@@ -488,6 +670,14 @@ function LeadsTab() {
                     className="border-t hover:bg-gray-50 cursor-pointer"
                     onClick={() => setExpandedLead(expandedLead === lead.id ? null : lead.id)}
                   >
+                    <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        checked={selectedLeads.has(lead.id)}
+                        onChange={() => toggleSelectLead(lead.id)}
+                        className="rounded border-gray-300"
+                      />
+                    </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <span className={`transform transition-transform ${expandedLead === lead.id ? 'rotate-90' : ''}`}>▶</span>
@@ -535,7 +725,7 @@ function LeadsTab() {
                   </tr>
                   {expandedLead === lead.id && (
                     <tr key={`${lead.id}-details`} className="bg-gray-50">
-                      <td colSpan={6} className="px-4 py-4">
+                      <td colSpan={7} className="px-4 py-4">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                           <div>
                             <div className="text-gray-500 text-xs mb-1">Contact Name</div>
@@ -604,6 +794,117 @@ function LeadsTab() {
           </table>
         )}
       </div>
+
+      {/* Email Modal */}
+      {showEmailModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-lg font-semibold mb-4">Email Leads to Buyer</h3>
+            <form onSubmit={(e) => {
+              e.preventDefault()
+              const form = e.target as HTMLFormElement
+              const email = (form.elements.namedItem('email') as HTMLInputElement).value
+              sendToEmail(email)
+            }}>
+              <input
+                name="email"
+                type="email"
+                placeholder="buyer@example.com"
+                className="w-full border rounded px-3 py-2 mb-4"
+                required
+              />
+              <p className="text-sm text-gray-500 mb-4">
+                {selectedLeads.size > 0 ? `${selectedLeads.size} leads selected` : `All ${leads.length} leads`} will be sent
+              </p>
+              <div className="flex gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowEmailModal(false)}
+                  className="px-4 py-2 border rounded text-gray-600 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Send Email
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Webhook Modal */}
+      {showWebhookModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-lg font-semibold mb-4">Send to Webhook/CRM</h3>
+            <form onSubmit={(e) => {
+              e.preventDefault()
+              const form = e.target as HTMLFormElement
+              const url = (form.elements.namedItem('webhookUrl') as HTMLInputElement).value
+              sendToWebhook(url)
+            }}>
+              <input
+                name="webhookUrl"
+                type="url"
+                placeholder="https://your-crm.com/webhook/leads"
+                className="w-full border rounded px-3 py-2 mb-4"
+                required
+              />
+              <p className="text-sm text-gray-500 mb-4">
+                {selectedLeads.size > 0 ? `${selectedLeads.size} leads selected` : `All ${leads.length} leads`} will be sent as JSON
+              </p>
+              <div className="flex gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowWebhookModal(false)}
+                  className="px-4 py-2 border rounded text-gray-600 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+                >
+                  Send to Webhook
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Share Link Modal */}
+      {showShareModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-lg font-semibold mb-4">Share Link Generated</h3>
+            <div className="bg-gray-100 p-3 rounded mb-4 break-all text-sm">
+              {shareUrl}
+            </div>
+            <div className="flex gap-2 justify-end">
+              <button
+                onClick={() => setShowShareModal(false)}
+                className="px-4 py-2 border rounded text-gray-600 hover:bg-gray-50"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(shareUrl)
+                  alert('Link copied to clipboard!')
+                }}
+                className="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700"
+              >
+                Copy Link
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
