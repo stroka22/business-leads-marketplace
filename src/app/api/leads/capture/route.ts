@@ -69,10 +69,9 @@ export async function POST(request: Request) {
     await supabase.from('lead_signals').insert({
       lead_id: newLead.id,
       signal_type: 'contact_found',
-      signal_date: new Date().toISOString(),
-      signal_strength: 70,
-      source_type: data.source || 'web_capture',
-      raw_data: data,
+      found_at: new Date().toISOString(),
+      score_contribution: 70,
+      signal_data: data,
     })
 
     return NextResponse.json(
