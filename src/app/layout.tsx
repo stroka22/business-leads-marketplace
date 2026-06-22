@@ -36,24 +36,19 @@ export default function RootLayout({
             </Link>
             <ul className="hidden md:flex items-center gap-6 text-sm">
               <li>
-                <Link href="/financing" className="text-gray-600 hover:text-blue-600 font-medium">
-                  Lead Dashboard
+                <Link href="/marketplace" className="text-gray-600 hover:text-blue-600 font-medium">
+                  Buy Leads
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard/leads" className="text-gray-600 hover:text-blue-600 font-medium">
+                  My Leads
                 </Link>
               </li>
               <li>
                 <Link href="/admin" className="text-gray-600 hover:text-blue-600 font-medium">
                   Admin
                 </Link>
-              </li>
-              <li className="relative group">
-                <span className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer">
-                  For Business Owners ▾
-                </span>
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                  <Link href="/apply" className="block px-4 py-2 hover:bg-gray-50 text-sm">Apply for Financing</Link>
-                  <Link href="/apply/calculator" className="block px-4 py-2 hover:bg-gray-50 text-sm">Loan Calculator</Link>
-                  <Link href="/apply/qualify" className="block px-4 py-2 hover:bg-gray-50 text-sm">Check Eligibility</Link>
-                </div>
               </li>
               <li>
                 <Link href="/login" className="text-gray-600 hover:text-blue-600 font-medium">
@@ -62,10 +57,10 @@ export default function RootLayout({
               </li>
               <li>
                 <Link 
-                  href="/financing" 
+                  href="/marketplace" 
                   className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
                 >
-                  View Leads →
+                  Browse Leads →
                 </Link>
               </li>
             </ul>
