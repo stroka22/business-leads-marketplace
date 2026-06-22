@@ -377,6 +377,7 @@ function LeadsTab() {
   const [leads, setLeads] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState({ status: '', industry: '', minScore: 0 })
+  const [expandedLead, setExpandedLead] = useState<string | null>(null)
   const supabase = createFinancingClient()
 
   useEffect(() => {
@@ -481,47 +482,123 @@ function LeadsTab() {
             </thead>
             <tbody>
               {leads.map(lead => (
-                <tr key={lead.id} className="border-t hover:bg-gray-50">
-                  <td className="px-4 py-3">
-                    <div className="font-medium">{lead.company_name}</div>
-                    {lead.phone && <div className="text-xs text-gray-500">{lead.phone}</div>}
-                  </td>
-                  <td className="px-4 py-3">
-                    {lead.city && `${lead.city}, `}{lead.state}
-                  </td>
-                  <td className="px-4 py-3 capitalize">{lead.industry?.replace(/_/g, ' ')}</td>
-                  <td className="px-4 py-3">
-                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                      (lead.lead_score || 0) >= 80 ? 'bg-red-100 text-red-700' :
-                      (lead.lead_score || 0) >= 60 ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-gray-100 text-gray-700'
-                    }`}>
-                      {lead.lead_score || 0}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <select
-                      value={lead.contact_status || 'new'}
-                      onChange={e => updateLeadStatus(lead.id, e.target.value)}
-                      className="border rounded px-2 py-1 text-xs"
-                    >
-                      <option value="new">New</option>
-                      <option value="contacted">Contacted</option>
-                      <option value="qualified">Qualified</option>
-                      <option value="proposal">Proposal</option>
-                      <option value="funded">Funded</option>
-                      <option value="lost">Lost</option>
-                    </select>
-                  </td>
-                  <td className="px-4 py-3">
-                    <button
-                      onClick={() => deleteLead(lead.id)}
-                      className="text-red-600 hover:text-red-800 text-xs"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
+                <>
+                  <tr 
+                    key={lead.id} 
+                    className="border-t hover:bg-gray-50 cursor-pointer"
+                    onClick={() => setExpandedLead(expandedLead === lead.id ? null : lead.id)}
+                  >
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <span className={`transform transition-transform ${expandedLead === lead.id ? 'rotate-90' : ''}`}>▶</span>
+                        <div>
+                          <div className="font-medium">{lead.company_name}</div>
+                          {lead.phone && <div className="text-xs text-gray-500">{lead.phone}</div>}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      {lead.city && `${lead.city}, `}{lead.state}
+                    </td>
+                    <td className="px-4 py-3 capitalize">{lead.industry?.replace(/_/g, ' ')}</td>
+                    <td className="px-4 py-3">
+                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                        (lead.lead_score || 0) >= 80 ? 'bg-red-100 text-red-700' :
+                        (lead.lead_score || 0) >= 60 ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-gray-100 text-gray-700'
+                      }`}>
+                        {lead.lead_score || 0}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
+                      <select
+                        value={lead.contact_status || 'new'}
+                        onChange={e => updateLeadStatus(lead.id, e.target.value)}
+                        className="border rounded px-2 py-1 text-xs"
+                      >
+                        <option value="new">New</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="qualified">Qualified</option>
+                        <option value="proposal">Proposal</option>
+                        <option value="funded">Funded</option>
+                        <option value="lost">Lost</option>
+                      </select>
+                    </td>
+                    <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
+                      <button
+                        onClick={() => deleteLead(lead.id)}
+                        className="text-red-600 hover:text-red-800 text-xs"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                  {expandedLead === lead.id && (
+                    <tr key={`${lead.id}-details`} className="bg-gray-50">
+                      <td colSpan={6} className="px-4 py-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Contact Name</div>
+                            <div className="font-medium">{lead.owner_name || '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Email</div>
+                            <div className="font-medium">{lead.email ? <a href={`mailto:${lead.email}`} className="text-blue-600 hover:underline">{lead.email}</a> : '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Phone</div>
+                            <div className="font-medium">{lead.phone ? <a href={`tel:${lead.phone}`} className="text-blue-600 hover:underline">{lead.phone}</a> : '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Loan Amount</div>
+                            <div className="font-medium">{lead.loan_amount_requested ? `$${Number(lead.loan_amount_requested).toLocaleString()}` : '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Loan Purpose</div>
+                            <div className="font-medium capitalize">{lead.loan_purpose?.replace(/_/g, ' ') || '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Time in Business</div>
+                            <div className="font-medium">{lead.time_in_business?.replace(/_/g, ' ') || '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Monthly Revenue</div>
+                            <div className="font-medium">{lead.monthly_revenue?.replace(/_/g, ' ') || '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Credit Score</div>
+                            <div className="font-medium capitalize">{lead.credit_score_range || '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Urgency</div>
+                            <div className="font-medium">{lead.urgency?.replace(/_/g, ' ') || '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Has Collateral</div>
+                            <div className="font-medium">{lead.has_collateral === true ? 'Yes' : lead.has_collateral === false ? 'No' : '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Lead Source</div>
+                            <div className="font-medium">{lead.lead_source || lead.source_type || '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs mb-1">Calculator Type</div>
+                            <div className="font-medium capitalize">{lead.calculator_type?.replace(/-/g, ' ') || '-'}</div>
+                          </div>
+                        </div>
+                        {lead.notes && (
+                          <div className="mt-4 pt-4 border-t">
+                            <div className="text-gray-500 text-xs mb-1">Notes</div>
+                            <div className="text-sm whitespace-pre-wrap">{lead.notes}</div>
+                          </div>
+                        )}
+                        <div className="mt-4 pt-4 border-t text-xs text-gray-400">
+                          Created: {new Date(lead.created_at).toLocaleString()}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </>
               ))}
             </tbody>
           </table>
