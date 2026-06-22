@@ -35,15 +35,16 @@ export async function POST(request: Request) {
     const data = await request.json()
     const supabase = await createFinancingServerClient()
 
-    // Map common fields
+    // Map common fields to actual table columns
     const lead = {
       company_name: data.company_name || data.companyName,
-      contact_name: data.contact_name || data.contactName,
+      owner_name: data.contact_name || data.contactName || data.owner_name,
       email: data.email,
       phone: data.phone,
       state: data.state,
       city: data.city,
       industry: detectIndustry(data.loan_purpose || data.purpose),
+      source_type: data.source || 'web_capture',
       lead_score: calculateInitialScore(data),
       contact_status: 'new',
       notes: buildNotes(data),
