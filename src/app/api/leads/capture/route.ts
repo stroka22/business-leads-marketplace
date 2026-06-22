@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       lead_score: calculateInitialScore(data),
       contact_status: 'new',
       // New structured fields
-      loan_amount_requested: data.loan_amount ? parseFloat(data.loan_amount.replace(/[^0-9.]/g, '')) : null,
+      loan_amount_requested: parseLoanAmount(data.loan_amount),
       loan_purpose: data.loan_purpose || data.purpose,
       time_in_business: data.time_in_business,
       monthly_revenue: data.monthly_revenue,
@@ -106,6 +106,16 @@ export async function POST(request: Request) {
       { status: 500, headers: getCorsHeaders(origin) }
     )
   }
+}
+
+function parseLoanAmount(amount: unknown): number | null {
+  if (!amount) return null
+  if (typeof amount === 'number') return amount
+  if (typeof amount === 'string') {
+    const cleaned = amount.replace(/[^0-9.]/g, '')
+    return cleaned ? parseFloat(cleaned) : null
+  }
+  return null
 }
 
 function detectIndustry(purpose: string): string {
