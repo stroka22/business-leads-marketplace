@@ -86,14 +86,19 @@ export async function POST(request: Request) {
       )
     }
 
-    // Add a signal for web capture
-    await supabase.from('lead_signals').insert({
-      lead_id: newLead.id,
-      signal_type: 'contact_found',
-      found_at: new Date().toISOString(),
-      score_contribution: 70,
-      signal_data: data,
-    })
+    // Add a signal for web capture (non-blocking, don't fail if this errors)
+    try {
+      await supabase.from('lead_signals').insert({
+        lead_id: newLead.id,
+        signal_type: 'contact_found',
+        found_at: new Date().toISOString(),
+        score_contribution: 70,
+        signal_data: data,
+      })
+    } catch (signalError) {
+      console.error('Failed to add lead signal:', signalError)
+      // Don't fail the request - lead was captured successfully
+    }
 
     return NextResponse.json(
       { success: true, lead_id: newLead.id },
